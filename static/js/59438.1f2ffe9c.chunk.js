@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkalignment_projects=self.webpackChunkalignment_projects||[]).push([[59438],{59438:(e,r,t)=>{t.r(r),t.d(r,{OperatorProject:()=>s.O});t(97799);var s=t(56175)}}]);
