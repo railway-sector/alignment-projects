@@ -404,8 +404,8 @@ function n1Graphics(xoffset: any, yoffset: any) {
           pointTextY = points[i][1];
         }
 
-        console.log(pointTextX);
-        console.log(pointTextY);
+        // console.log(pointTextX);
+        // console.log(pointTextY);
 
         const point: any = {
           type: "point",
@@ -902,7 +902,7 @@ export function disableZooming(view: any) {
 
   // exlude the zoom widget from the default UI
   // view.ui.components = [];
-  // overView.ui.components = [];
+  view.ui.components = [];
 
   // disable mouse wheel scroll zooming on the overView
   view?.on("mouse-wheel", stopEvtPropagation);
@@ -944,7 +944,7 @@ export function disableZooming(view: any) {
 }
 
 const extentDebouncer = promiseUtils.debounce(
-  (extent3Dgraphic: any, extent: any) => {
+  async (extent3Dgraphic: any, extent: any) => {
     extent3Dgraphic.geometry = extent;
   }
 );
@@ -964,7 +964,7 @@ export function OverviewExtentsetup(view: any, overview: any) {
   overview?.graphics?.add(extent3Dgraphic);
 
   reactiveUtils.watch(
-    () => view?.extent,
+    () => view?.extent, //view?.visibleArea,
     (extent: any) => {
       // Sync the overview map location
       // whenever the 3d view is stationary

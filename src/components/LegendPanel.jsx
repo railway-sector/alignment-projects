@@ -22,7 +22,7 @@ const LegendPanel = () => {
   return (
     <>
       <arcgis-legend
-        position="bottom-left"
+        slot="bottom-left"
         legend-style="classic"
         id="mmsp-centerline-construction"
         referenceElement="#arcgis-map"

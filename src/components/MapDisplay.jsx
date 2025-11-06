@@ -85,8 +85,6 @@ import {
   zoomToLayer,
 } from "../Query";
 import { MyContext } from "../App";
-import StationList from "./StationList";
-import { CalciteButton } from "@esri/calcite-components-react";
 
 function MapDisplay() {
   const { categorynames, projectnames } = use(MyContext);
@@ -94,6 +92,7 @@ function MapDisplay() {
   // Main Map
   const [mapView, setMapView] = useState();
   const arcgisMap = document.querySelector("#arcgis-map");
+  const arcgisOverviewMap = document.querySelector("#arcgis-overview-map");
 
   // Launuch
   const arcgisLaunch = document.querySelector("#launch-button");
@@ -105,6 +104,9 @@ function MapDisplay() {
   const arcgisExpand = document.querySelector("#actionpanel-expand");
   const [actionPanelExpanded, setActionPanelExpanded] = useState(true);
 
+  // overview extent
+  const [overViewExtent, setOverViewExtent] = useState(null);
+
   reactiveUtils.when(
     () => arcgisExpand?.expanded === false,
     () => setActionPanelExpanded(false)
@@ -115,27 +117,13 @@ function MapDisplay() {
     () => setActionPanelExpanded(true)
   );
 
-  // Expand (Station List for NSCR projects)
-  // const stationListExpand = document.querySelector("#stationlist-expand");
-  // const [stationListPanelExpanded, setStationListPanelExpanded] =
-  //   useState(false);
-
-  // reactiveUtils.when(
-  //   () => stationListExpand?.expanded === false,
-  //   () => setStationListPanelExpanded(false)
-  // );
-
-  // reactiveUtils.when(
-  //   () => stationListExpand?.expanded === true,
-  //   () => setStationListPanelExpanded(true)
-  // );
-
   useEffect(() => {
     if (mapView) {
       // Add layers and widgets
       arcgisMap.view.ui.add(arcgisExpand, "top-right");
       // arcgisMap.view.ui.add(stationListExpand, "bottom-right");
       arcgisMap.view.ui.add(arcgisLaunch, "top-left");
+      arcgisMap.view.ui.components = [];
 
       arcgisMap.map.add(n1CenterlineLayer);
       arcgisMap.map.add(n1CenterlineConstruction);
@@ -171,6 +159,17 @@ function MapDisplay() {
       arcgisMap.map.add(manila_pin_pointGraphicLayer);
       arcgisMap.map.add(manila_pin_lineGraphicsLayer);
 
+      arcgisOverviewMap.map.add(n2CenterlineOverView);
+      arcgisOverviewMap.map.add(n1CenterlineOverView);
+      arcgisOverviewMap.map.add(scCenterlineOverView);
+      arcgisOverviewMap.map.add(mmspCenterlineOverView);
+
+      // Disable all user navagating actions
+      disableZooming(arcgisOverviewMap.view);
+
+      // Ensure to add 'arcgisMap' as callback. If not, you will get 'Abort' error
+      OverviewExtentsetup(arcgisMap, arcgisOverviewMap);
+
       // Default Rendering
       mmspAlignmentRenderer(projectnames);
       n1AlignmentRenderer(projectnames);
@@ -188,7 +187,7 @@ function MapDisplay() {
         },
       ];
     }
-  });
+  }, [mapView]); // you need to define this; otherwise, the extent boundary will not be updated when the Project is changed.
 
   useEffect(() => {
     if (mapView) {
@@ -251,6 +250,12 @@ function MapDisplay() {
           homeExtentRenderer(arcgisMap);
           // ProgressAllLegendOn();
           stationPointSymbolToConstruction();
+          arcgisLegend.layerInfos = [
+            {
+              layer: n1CenterlineConstruction,
+              title: "Civil Construction Progress",
+            },
+          ];
 
           // NSCR
         } else if (projectnames === projectNames[1]) {
@@ -316,27 +321,6 @@ function MapDisplay() {
     }
   }, [categorynames, projectnames]);
 
-  //******************************************************** */
-  // Overview map
-  //******************************************************** */
-  const [mapOverview, setMapOverview] = useState();
-  const arcgisOverviewMap = document.querySelector("#arcgis-overview-map");
-
-  useEffect(() => {
-    if (mapOverview) {
-      arcgisOverviewMap.map.add(n2CenterlineOverView);
-      arcgisOverviewMap.map.add(n1CenterlineOverView);
-      arcgisOverviewMap.map.add(scCenterlineOverView);
-      arcgisOverviewMap.map.add(mmspCenterlineOverView);
-
-      // Disable all user navagating actions
-      disableZooming(arcgisOverviewMap.view);
-
-      // Ensure to add 'arcgisMap' as callback. If not, you will get 'Abort' error
-      OverviewExtentsetup(arcgisMap, arcgisOverviewMap);
-    }
-  }, [arcgisMap]);
-
   return (
     <arcgis-map
       id="arcgis-map"
@@ -350,23 +334,23 @@ function MapDisplay() {
         setMapView(event.target);
       }}
     >
-      <arcgis-compass position="top-left"></arcgis-compass>
-      <arcgis-home position="top-left"></arcgis-home>
+      <arcgis-compass slot="top-left"></arcgis-compass>
+      <arcgis-home slot="top-left"></arcgis-home>
 
       {/* Printer widget */}
-      <arcgis-expand position="top-left" expandedIcon="print" id="print-expand">
-        <arcgis-print position="top-left"></arcgis-print>
+      <arcgis-expand slot="top-left" expandedIcon="print" id="print-expand">
+        <arcgis-print></arcgis-print>
       </arcgis-expand>
 
       {/* Launch button*/}
-      <CalciteButton
+      {/*<CalciteButton
         id="launch-button"
         href="https://gis.railway-sector.com/portal/apps/experiencebuilder/experience/?id=8d2c547125db4c11ab1e1f3ce085dcd7"
         icon-end="launch"
         scale="s"
         label="Open in a new tab"
         target="_blank"
-      ></CalciteButton>
+      ></CalciteButton> */}
 
       {/* Station List */}
       {/* <arcgis-expand
@@ -379,20 +363,20 @@ function MapDisplay() {
 
       {/* Action Panel */}
       <arcgis-expand
-        position="top-right"
+        slot="top-right"
         mode="floating"
         id="actionpanel-expand"
         expanded
         close-on-sec
       >
-        <arcgis-placement>
+        <div style={{ maxHeight: "200px" }}>
           <ActionPanel id={actionPanelExpanded} />
-        </arcgis-placement>
+        </div>
       </arcgis-expand>
 
       {/* Legend widget */}
       <arcgis-legend
-        position="bottom-left"
+        slot="bottom-left"
         legend-style="classic"
         id="mmsp-centerline-construction"
       ></arcgis-legend>
@@ -426,9 +410,6 @@ function MapDisplay() {
         ground="world-elevation"
         zoom="5"
         center={overViewCenter}
-        onarcgisViewReadyChange={(event) => {
-          setMapOverview(event.target);
-        }}
       ></arcgis-map>
     </arcgis-map>
   );
