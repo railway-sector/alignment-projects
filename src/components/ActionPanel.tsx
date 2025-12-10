@@ -7,7 +7,7 @@ const ActionPanel = (props: any) => {
     <>
       <div style={{ display: props.id === true ? "block" : "none" }}>
         <CalciteCard style={{ fontSize: "0.5rem" }}>
-          <CategoryPanelSegmentedList />
+          {/* <CategoryPanelSegmentedList /> */}
           <ProjectPanelSegmentedList />
         </CalciteCard>
       </div>

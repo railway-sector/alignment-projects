@@ -180,12 +180,12 @@ function MapDisplay() {
       stationPointSymbolToOriginal();
 
       // layer legend
-      arcgisLegend.layerInfos = [
-        {
-          layer: mmspCenterlineConstruction,
-          title: "Civil Construction Progress",
-        },
-      ];
+      // arcgisLegend.layerInfos = [
+      //   {
+      //     layer: mmspCenterlineConstruction,
+      //     title: "Civil Construction Progress",
+      //   },
+      // ];
     }
   }, [mapView]); // you need to define this; otherwise, the extent boundary will not be updated when the Project is changed.
 
@@ -375,11 +375,11 @@ function MapDisplay() {
       </arcgis-expand>
 
       {/* Legend widget */}
-      <arcgis-legend
+      {/* <arcgis-legend
         slot="bottom-left"
         legend-style="classic"
         id="mmsp-centerline-construction"
-      ></arcgis-legend>
+      ></arcgis-legend> */}
 
       {/* Train Operation Schedule*/}
       <img
@@ -401,7 +401,7 @@ function MapDisplay() {
           borderColor: "grey",
           borderWidth: "0.5px",
           overflow: "hidden",
-          top: actionPanelExpanded === false ? "60px" : "200px",
+          top: actionPanelExpanded === false ? "60px" : "140px",
           right: "40px",
         }}
         id="arcgis-overview-map"
