@@ -302,7 +302,7 @@ function MapDisplay() {
             },
           ];
 
-          // SCRP
+          // SCRP //////
         } else if (projectnames === projectNames[4]) {
           scProgressRenderer(projectnames);
           zoomToLayer(scStationLayer, arcgisMap);
