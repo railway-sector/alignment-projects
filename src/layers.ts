@@ -753,6 +753,7 @@ export const scCenterlineOverView = new FeatureLayer({
 
 // ----------------- Airport and Manila Pins ----------------//
 // Clark International Airport Pins
+
 export const clarkAirport_pin = new FeatureLayer({
   portalItem: {
     id: "158b39ce19c24015b0476c24af9f5264",
@@ -768,8 +769,8 @@ export const clarkAirport_pin_pointGraphicLayer = new GraphicsLayer();
 clarkAirport_pin_pointGraphicLayer.listMode = "hide";
 
 export const clarkAirport_pin_lineGraphicsLayer = new GraphicsLayer({
-  //maxScale: maxScale,
-  //minScale: minScale
+  // maxScale: maxScale,
+  // minScale: minScale,
 });
 clarkAirport_pin_lineGraphicsLayer.listMode = "hide";
 

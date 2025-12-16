@@ -62,6 +62,7 @@ import {
 } from "../UniqueValues";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 import {
+  clarkAirportLabel,
   disableZooming,
   homeExtentRenderer,
   mmspAlignmentRenderer,
@@ -178,6 +179,7 @@ function MapDisplay() {
       homeExtentRenderer(arcgisMap);
       stationLabelFontSizeDefault();
       stationPointSymbolToOriginal();
+      clarkAirportLabel();
 
       // layer legend
       // arcgisLegend.layerInfos = [

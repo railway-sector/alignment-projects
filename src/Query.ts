@@ -1,8 +1,17 @@
 import { SimpleFillSymbol } from "@arcgis/core/symbols";
 import {
+  airport_pin,
+  airport_pin_lineGraphicsLayer,
+  airport_pin_pointGraphicLayer,
+  clarkAirport_pin,
+  clarkAirport_pin_lineGraphicsLayer,
+  clarkAirport_pin_pointGraphicLayer,
   dateTable,
   lineSymbol_construction,
   lineSymbol_construction_project,
+  manila_pin,
+  manila_pin_lineGraphicsLayer,
+  manila_pin_pointGraphicLayer,
   mmspCenterlineConstruction,
   mmspCenterlineLayer,
   mmspGraphicsLayer,
@@ -44,6 +53,7 @@ import {
   cpLabelColor,
   cpLineColor,
   cpLineWidth,
+  fontSizeAirport,
   home_rotation,
   labelStation_fontSize_default,
   projectLabelFontSize,
@@ -849,6 +859,203 @@ export function scGraphicsLayerMove(projectSelected: any) {
     yoffset = yoffset_sc_reset;
   }
   scGraphics(xoffset, yoffset);
+}
+
+export function clarkAirportLabel() {
+  // Clark International Airport
+  var query = clarkAirport_pin.createQuery();
+  clarkAirport_pin.queryFeatures(query).then(function (response) {
+    var stats: any = response.features[0];
+
+    // Create label point and label for 'Manila'
+    const x0 = stats.geometry.longitude;
+    const y0 = stats.geometry.latitude;
+    const x1 = x0 - 0.1; // Offset
+    const y1 = y0 - 0.15;
+
+    const point: any = {
+      type: "point",
+      longitude: x1,
+      latitude: y0,
+    };
+
+    let clarkAirport_textSymbol: any = {
+      type: "text", // autocasts as new TextSymbol()
+      color: "white",
+      //backgroundColor: projectBackgroundColor,
+      text: "Clark Int. Airport",
+      horizontalAlignment: "right",
+      //yoffset: -5,
+      font: {
+        size: fontSizeAirport,
+        //family: "Merriweather",
+        //style: "italic",
+        // weight: "bold",
+      },
+    };
+
+    const clarkAirport_PointGraphic = new Graphic({
+      geometry: point,
+      symbol: clarkAirport_textSymbol,
+    });
+    clarkAirport_pin_pointGraphicLayer.add(clarkAirport_PointGraphic);
+
+    // Crate label line for 'Manila'
+    // Create lin path and polyline
+    const path = [
+      [x0, y0],
+      [x1, y0],
+    ];
+
+    const clarkAirport_pin_polyline: any = {
+      type: "polyline",
+      paths: path,
+    };
+
+    // Set line properties
+    const clarkAirport_pin_LineSymbol: any = {
+      type: "simple-line",
+      color: cpLineColor,
+      width: cpLineWidth,
+    };
+
+    // Add to Graphic
+    const clarkAirport_pin_LineGraphic = new Graphic({
+      geometry: clarkAirport_pin_polyline,
+      symbol: clarkAirport_pin_LineSymbol,
+    });
+    clarkAirport_pin_lineGraphicsLayer.add(clarkAirport_pin_LineGraphic);
+  });
+
+  // Ninoy Internation Airport Pins
+  var query1 = airport_pin.createQuery();
+  airport_pin.queryFeatures(query1).then(function (response) {
+    var stats: any = response.features[0];
+
+    // Create label point and label for 'Manila'
+    const x0 = stats.geometry.longitude;
+    const y0 = stats.geometry.latitude;
+    const x1 = x0 - 0.1; // Offset
+
+    const point: any = {
+      type: "point",
+      longitude: x1,
+      latitude: y0,
+    };
+
+    let airport_textSymbol: any = {
+      type: "text", // autocasts as new TextSymbol()
+      color: "white",
+      //backgroundColor: projectBackgroundColor,
+      text: "Ninoy Aquino Int. Airport",
+      horizontalAlignment: "right",
+      //yoffset: -5,
+      font: {
+        // autocasts as new Font()
+        size: fontSizeAirport,
+        //family: "Merriweather",
+        //style: "italic",
+        // weight: "bold",
+      },
+    };
+
+    const airport_PointGraphic = new Graphic({
+      geometry: point,
+      symbol: airport_textSymbol,
+    });
+    airport_pin_pointGraphicLayer.add(airport_PointGraphic);
+
+    // Crate label line for 'NAIA'
+    // Create lin path and polyline
+    const path = [
+      [x0, y0],
+      [x1, y0],
+    ];
+
+    const airport_pin_polyline: any = {
+      type: "polyline",
+      paths: path,
+    };
+
+    // Set line properties
+    const airport_pin_LineSymbol: any = {
+      type: "simple-line",
+      color: cpLineColor,
+      width: cpLineWidth,
+    };
+
+    // Add to Graphic
+    const airport_pin_LineGraphic = new Graphic({
+      geometry: airport_pin_polyline,
+      symbol: airport_pin_LineSymbol,
+    });
+    airport_pin_lineGraphicsLayer.add(airport_pin_LineGraphic);
+  });
+
+  // Manila pin
+  var query2 = manila_pin.createQuery();
+  manila_pin.queryFeatures(query2).then(function (response) {
+    var stats: any = response.features[0];
+
+    // Create label point and label for 'Manila'
+    const x0 = stats.geometry.longitude;
+    const y0 = stats.geometry.latitude;
+    const x1 = x0 - 0.15; // Offset
+
+    const point: any = {
+      type: "point",
+      longitude: x1,
+      latitude: y0,
+    };
+
+    let manila_textSymbol: any = {
+      type: "text", // autocasts as new TextSymbol()
+      color: "white",
+      //backgroundColor: projectBackgroundColor,
+      text: "Manila",
+      horizontalAlignment: "right",
+      //yoffset: -5,
+      font: {
+        // autocasts as new Font()
+        size: 15,
+        //family: "Merriweather",
+        //style: "italic",
+        weight: "bold",
+      },
+    };
+
+    const manila_PointGraphic = new Graphic({
+      geometry: point,
+      symbol: manila_textSymbol,
+    });
+    manila_pin_pointGraphicLayer.add(manila_PointGraphic);
+
+    // Crate label line for 'Manila'
+    // Create lin path and polyline
+    const path = [
+      [x0, y0],
+      [x1, y0],
+    ];
+
+    const manila_pin_polyline: any = {
+      type: "polyline",
+      paths: path,
+    };
+
+    // Set line properties
+    const manila_pin_LineSymbol: any = {
+      type: "simple-line",
+      color: cpLineColor,
+      width: cpLineWidth,
+    };
+
+    // Add to Graphic
+    const manila_pin_LineGraphic = new Graphic({
+      geometry: manila_pin_polyline,
+      symbol: manila_pin_LineSymbol,
+    });
+    manila_pin_lineGraphicsLayer.add(manila_pin_LineGraphic);
+  });
 }
 
 ///////////////////////////////////////////////////////////
